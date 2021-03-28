@@ -1,6 +1,6 @@
 // Tests RDRAND CPU Instruction
 // https://github.com/cjee21/RDRAND-Tester
-// Last modified 2021-03-25
+// Last modified 2021-03-28
 
 #include <stdio.h>
 #include <stdint.h>
@@ -8,8 +8,8 @@
 #include <stdlib.h>
 #include <cpuid.h>  // for __get_cpuid intrinsic
 
-#define VERSION 20210325
-#define TEST_NUM 5
+#define VERSION 20210328 // application version number
+#define TEST_NUM 20      // number of tests to perform
 
 #ifdef __x86_64__
 #define ARCH "x86_64"
@@ -63,8 +63,8 @@ int main() {
            "Testing RDRAND...\n\n",
            support[1], support[supports_rdseed()]);
 
-    // test 5 times
-    for (int i = 0; i < 5; ++i) {
+    // test for TEST_NUM times
+    for (int i = 0; i < TEST_NUM; ++i) {
         // max 10 retires to get a successful RDRAND
         success = rdrand_retry(10, &rand_num[i]);
         if (!success) {
@@ -74,10 +74,10 @@ int main() {
 
         // display results
 #ifdef __x86_64__
-        printf("try: %i   success: %i   random number: %20llu (0x%016llx)\n", i + 1, success, (unsigned long long)rand_num[i], (unsigned long long)rand_num[i]);
+        printf("try: %3i   success: %i   random number: %20llu (0x%016llx)\n", i + 1, success, (unsigned long long)rand_num[i], (unsigned long long)rand_num[i]);
 #endif
 #ifdef __i386__
-        printf("try: %i   success: %i   random number: %10u (0x%08x)\n", i + 1, success, (unsigned)rand_num[i], (unsigned)rand_num[i]);
+        printf("try: %3i   success: %i   random number: %10u (0x%08x)\n", i + 1, success, (unsigned)rand_num[i], (unsigned)rand_num[i]);
 #endif
     }
 
